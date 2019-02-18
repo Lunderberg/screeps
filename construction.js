@@ -1,7 +1,6 @@
 function walls(room) {
     if(room.memory.hasOwnProperty('wall_locations')) {
         var wall_locations = room.memory.wall_locations;
-        console.log(wall_locations);
     } else {
         var wall_locations = determine_wall_locations(room);
         room.memory.wall_locations = wall_locations;

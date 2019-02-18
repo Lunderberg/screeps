@@ -23,7 +23,7 @@ var roleUpgrader = {
             var target = creep.room.controller;
             var res = creep.upgradeController(target, RESOURCE_ENERGY);
             if(res === ERR_NOT_IN_RANGE) {
-                creep.moveTo(target);
+                creep.moveTo(target, {visualizePathStyle: {}});
             }
         }
     },

@@ -1,20 +1,37 @@
-function spawning(configs) {
-    var spawn = Game.spawns['Spawn1'];
-
-    var creeps = [];
-    for(var name in Game.creeps) {
-        creeps.push(Game.creeps[name]);
-    }
-
-    configs.forEach(config => {
-        var num_existing = creeps
-            .filter(creep => creep.memory.role === config.role)
-            .length;
-        if(num_existing < config.min_number) {
-            var res = spawn.spawnCreep(config.body, config.name + Game.time,
-                                       {memory: {role: config.role}});
-        }
-    });
+// List of creeps to be generated.
+// Should be config objects with name, body, and memory
+var queue = Memory.spawn_queue;
+if(queue === undefined) {
+    Memory.spawn_queue = [];
+    queue = Memory.spawn_queue;
 }
 
-module.exports = spawning;
+
+function do_spawn() {
+    if(queue.length === 0) {
+        return;
+    }
+
+    var spawn = Game.spawns['Spawn1'];
+
+    var spawn_config = queue[0];
+
+    var name = spawn_config.name + Game.time;
+    var body = spawn_config.body;
+    var memory = spawn_config.memory;
+
+    var err = spawn.spawnCreep(
+        body, name,
+        {memory: memory, dryRun: true});
+    if(!err) {
+        spawn.spawnCreep(
+            body, name,
+            {memory: memory});
+        queue.shift();
+    }
+}
+
+module.exports = {
+    do_spawn: do_spawn,
+    queue: queue,
+};

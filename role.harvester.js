@@ -20,7 +20,7 @@ var roleHarvester = {
         if(targets.length) {
             var res = creep.transfer(targets[0], RESOURCE_ENERGY);
             if(res === ERR_NOT_IN_RANGE) {
-                creep.moveTo(targets[0]);
+                creep.moveTo(targets[0], {visualizePathStyle: {}});
             }
             return;
         }

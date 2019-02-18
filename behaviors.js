@@ -31,7 +31,7 @@ function harvest_energy(creep) {
     var source = Game.getObjectById(source_id);
     var res = creep.harvest(source);
     if(res === ERR_NOT_IN_RANGE) {
-        creep.moveTo(source);
+        creep.moveTo(source, {visualizePathStyle: {}});
     }
     return OK;
 }
@@ -72,7 +72,7 @@ function build_repair(creep) {
         res = creep.repair(target);
     }
     if(res === ERR_NOT_IN_RANGE) {
-        creep.moveTo(target);
+        creep.moveTo(target, {visualizePathStyle: {}});
     }
 
     return OK;
