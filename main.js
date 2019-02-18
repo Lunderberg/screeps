@@ -1,6 +1,6 @@
 var roles = require('roles');
 var spawning = require('spawning');
-var construction = require('construction');
+var room_planner = require('room_planner');
 var economy = require('economy');
 
 function clear_dead_memory() {
@@ -14,16 +14,15 @@ function clear_dead_memory() {
 module.exports.loop = function() {
     clear_dead_memory();
 
-    construction.walls(Game.spawns['Spawn1'].room);
+    var room = Game.spawns['Spawn1'].room;
+    room_planner.plan_room(room);
+    room_planner.apply_plan(room);
 
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
         roles[creep.memory.role].run(creep);
     }
 
-    //console.log(JSON.stringify(spawning.queue));
-
     economy.basic_workers();
-    economy.economy();
     spawning.do_spawn();
 };

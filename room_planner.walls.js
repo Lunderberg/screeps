@@ -1,17 +1,4 @@
-function walls(room) {
-    if(room.memory.hasOwnProperty('wall_locations')) {
-        var wall_locations = room.memory.wall_locations;
-    } else {
-        var wall_locations = determine_wall_locations(room);
-        room.memory.wall_locations = wall_locations;
-    }
-
-    wall_locations.forEach( (pos) => {
-        room.createConstructionSite(pos.x, pos.y, STRUCTURE_WALL);
-    });
-}
-
-function determine_wall_locations(room) {
+function choose_wall_locations(room) {
     // 2 is minimum tiles from exit that wall can be
     var tiles_from_wall = 2;
 
@@ -113,5 +100,5 @@ function breadth_first_search(terrain, source_tiles, target_tiles) {
 }
 
 module.exports = {
-    walls: walls,
+    choose_wall_locations: choose_wall_locations,
 };
