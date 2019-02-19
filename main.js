@@ -24,5 +24,6 @@ module.exports.loop = function() {
     }
 
     economy.basic_workers();
+    economy.queue_spawn_miners();
     spawning.do_spawn();
 };

@@ -1,4 +1,5 @@
 var spawning = require('spawning');
+var util = require('util');
 
 function basic_workers() {
     var spawn_configs = [
@@ -41,8 +42,68 @@ function basic_workers() {
     });
 }
 
+function queue_spawn_miners() {
+    var energy_capacity_available = Object.values(Game.spawns)
+        .map( spawn => spawn.room.energyCapacityAvailable )
+        .max()
+    ;
+
+    var body_types = [
+        [MOVE, WORK, WORK, CARRY],
+        [MOVE, MOVE, WORK, WORK, WORK, WORK, CARRY],
+        [MOVE, MOVE, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY],
+    ];
+
+    var body = body_types
+        .filter( body =>
+                 util.creep_cost(body) <= energy_capacity_available
+               )[0];
+
+    var num_work_parts = body
+        .filter( part => (part === WORK) )
+        .length
+    ;
+
+    // console.log(energy_capacity_available);
+    // console.log(energy_capacity_available.max);
+
+    var assigned_spots = Object.values(Game.creeps)
+        .concat(spawning.queue)
+        .filter(creep => creep.memory.role === 'miner')
+        .map(creep => creep.memory.mining_pos)
+    ;
+
+    Object.values(Game.rooms)
+        .filter( (room) => {
+            return room.memory.plan !== undefined;
+        })
+        .map( room => room.memory.plan.energy_mining_spots )
+        .flat()
+        .filter( pos => (pos.type === 'primary' ||
+                         num_work_parts < 6) )
+        .filter( pos => assigned_spots.every(
+            assigned_spot => (assigned_spot.x !== pos.x ||
+                              assigned_spot.y !== pos.y)
+        ))
+        .forEach( pos => {
+            var memory = {
+                role: 'miner',
+                mining_pos: pos,
+            };
+
+            spawning.queue.push({
+                name: 'Miner',
+                body: body,
+                memory: memory,
+            });
+        })
+    ;
+
+
+}
 
 
 module.exports = {
     basic_workers: basic_workers,
+    queue_spawn_miners: queue_spawn_miners,
 };

@@ -17,4 +17,36 @@ Array.prototype.key_sort = function(key) {
     return output;
 };
 
-module.exports = {};
+Array.prototype.max = function(key) {
+    if(key === undefined) {
+        key = function(x) { return x; }
+    }
+
+    return this
+        .slice()
+        .key_sort(key)[this.length-1];
+};
+
+Array.prototype.min = function(key) {
+    if(key === undefined) {
+        key = function(x) { return x; }
+    }
+
+    return this
+        .slice()
+        .key_sort(key)[0];
+};
+
+Array.prototype.sum = function() {
+    return this.reduce( (cumsum, num) => cumsum+num, 0);
+};
+
+function creep_cost(body_parts) {
+    return body_parts
+        .map( part => BODYPART_COST[part])
+        .sum();
+}
+
+module.exports = {
+    creep_cost: creep_cost,
+};

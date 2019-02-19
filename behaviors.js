@@ -16,13 +16,7 @@ function harvest_energy(creep) {
     var source_id = creep.memory.harvest_energy_source;
     if(source_id === undefined) {
         var sources = creep.room.find(FIND_SOURCES)
-            .sort(function(a, b) {
-
-                var a_rate = source_harvest_rate(a);
-                var b_rate = source_harvest_rate(b);
-
-                return a_rate > b_rate;
-            });
+            .key_sort(source_harvest_rate);
 
         creep.memory.harvest_energy_source = sources[0].id;
         source_id = creep.memory.harvest_energy_source.id;
