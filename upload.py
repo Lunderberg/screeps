@@ -46,7 +46,7 @@ screeps_api_endpoint = 'https://screeps.com/api/user/code'
 def upload_screeps(username, password, code_dir, branch='default'):
     modules = {}
     for filename in os.listdir(code_dir):
-        if filename.lower().endswith('.js'):
+        if filename.lower().endswith('.js') and '#' not in filename:
             module_name = filename[:-3]
             module_contents = open(os.path.join(code_dir, filename)).read()
             modules[module_name] = module_contents
