@@ -3,11 +3,11 @@ var behaviors = require('behaviors');
 function run(creep) {
     // Priorities:
     // 1. Get to the mining site
-    // 2. Mine energy
+    // 2. Mine energy, if it won't drop on floor
     // 3. Transfer energy to adjacent, non-miner creeps
     // 4. Build the mining storage (if capacity full)
     // 5. Repair the mining storage
-    // 6. Transfer energy to the mining storage (if capacity full)
+    // 6. Transfer energy to the mining storage
 
 
 
@@ -27,6 +27,8 @@ function run(creep) {
                             Math.abs(struct.pos.x - loc.x) <= 1 &&
                             Math.abs(struct.pos.y - loc.y) <= 1 ) },
     )[0];
+    var container_is_full = (container===undefined ||
+                             container.store.energy === container.storeCapacity);
 
     var adjacent_creep = creep.room.find(
         FIND_MY_CREEPS,
@@ -50,9 +52,13 @@ function run(creep) {
         creep.moveTo(loc.x, loc.y, {visualizePathStyle: {}});
     }
 
-    // 2. Mine energy
-    var source = Game.getObjectById(loc.source_id);
-    creep.harvest(source);
+    // 2. Mine energy, if it won't drop on floor
+    if(!container_is_full || !at_full_capacity) {
+        var source = Game.getObjectById(loc.source_id);
+        creep.harvest(source);
+    } else {
+        creep.say('I rest.');
+    }
 
     // 3. Transfer energy to adjacent, non-miner creeps
     if(adjacent_creep) {
@@ -73,7 +79,9 @@ function run(creep) {
     }
 
     // 6. Transfer energy to the mining storage (if capacity full)
-
+    if(container) {
+        creep.transfer(container, RESOURCE_ENERGY);
+    }
 };
 
 module.exports = {
