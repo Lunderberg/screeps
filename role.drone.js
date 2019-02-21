@@ -201,7 +201,9 @@ function get_energy(creep) {
     // Try to mine from the energy source
     var err = creep.harvest(energy_source);
     if(err === ERR_NOT_IN_RANGE) {
-        creep.moveTo(energy_source, {visualizePathStyle: {}});
+        // Prefer to move toward the container, in case miners are in
+        // front of the energy source.
+        creep.moveTo(container || energy_source, {visualizePathStyle: {}});
     }
 }
 
