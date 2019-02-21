@@ -1,5 +1,6 @@
 var walls = require('room_planner.walls');
 var mining = require('room_planner.mining');
+var roads = require('room_planner.roads');
 
 function plan_room(room) {
     if(room.memory.plan === undefined) {

@@ -31,7 +31,12 @@ function do_spawn() {
     }
 }
 
+function clear_queue() {
+    queue.length = 0;
+}
+
 module.exports = {
     do_spawn: do_spawn,
     queue: queue,
+    clear_queue: clear_queue,
 };

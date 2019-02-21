@@ -3,20 +3,30 @@ var util = require('util');
 
 function basic_workers() {
     var spawn_configs = [
-        {role: 'harvester',
-         name: 'Harvester',
+        {role: 'drone',
+         name: 'Drone',
          body: [MOVE, CARRY, WORK],
-         min_number: 4},
+         min_number: 8},
 
-        {role: 'upgrader',
-         name: 'Upgrader',
-         body: [MOVE, CARRY, WORK],
+        // {role: 'harvester',
+        //  name: 'Harvester',
+        //  body: [MOVE, CARRY, WORK],
+        //  min_number: 2},
+
+        // {role: 'upgrader',
+        //  name: 'Upgrader',
+        //  body: [MOVE, CARRY, WORK],
+        //  min_number: 6},
+
+        // {role: 'builder',
+        //  name: 'Builder',
+        //  body: [MOVE, CARRY, WORK],
+        //  min_number: 6},
+
+        {role: 'defender',
+         name: 'Defender',
+         body: [TOUGH, MOVE, MOVE, RANGED_ATTACK],
          min_number: 2},
-
-        {role: 'builder',
-         name: 'Builder',
-         body: [MOVE, CARRY, WORK],
-         min_number: 4},
     ];
 
     var num_existing = {};
@@ -27,9 +37,10 @@ function basic_workers() {
     Object.values(Game.creeps)
         .concat(spawning.queue)
         .forEach(creep => {
-            if(num_existing[creep.memory.role] !== undefined) {
-                num_existing[creep.memory.role]++;
+            if(num_existing[creep.memory.role] === undefined) {
+                num_existing[creep.memory.role] = 0;
             }
+            num_existing[creep.memory.role]++;
         });
 
     spawn_configs.forEach(config => {
@@ -64,9 +75,6 @@ function queue_spawn_miners() {
         .length
     ;
 
-    // console.log(energy_capacity_available);
-    // console.log(energy_capacity_available.max);
-
     var assigned_spots = Object.values(Game.creeps)
         .concat(spawning.queue)
         .filter(creep => creep.memory.role === 'miner')
@@ -98,8 +106,6 @@ function queue_spawn_miners() {
             });
         })
     ;
-
-
 }
 
 

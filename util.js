@@ -41,12 +41,27 @@ Array.prototype.sum = function() {
     return this.reduce( (cumsum, num) => cumsum+num, 0);
 };
 
+Array.prototype.random_choice = function() {
+    return this[Math.floor(this.length*Math.random())];
+};
+
 function creep_cost(body_parts) {
     return body_parts
         .map( part => BODYPART_COST[part])
         .sum();
 }
 
+function source_harvest_rate(source) {
+    if(source.ticksToRegeneration === undefined) {
+        return 0;
+    }
+
+    var regen_ticks = 300;
+    return (source.energyCapacity - source.energy) /
+        (regen_ticks - source.ticksToRegeneration);
+}
+
 module.exports = {
     creep_cost: creep_cost,
+    source_harvest_rate: source_harvest_rate,
 };

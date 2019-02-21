@@ -1,12 +1,4 @@
-function source_harvest_rate(source) {
-    if(source.ticksToRegeneration === undefined) {
-        return 0;
-    }
-
-    var regen_ticks = 300;
-    return (source.energyCapacity - source.energy) /
-        (regen_ticks - source.ticksToRegeneration);
-}
+var util = require('util');
 
 function harvest_energy(creep) {
     if(creep.carry.energy === creep.carryCapacity) {
@@ -16,7 +8,7 @@ function harvest_energy(creep) {
     var source_id = creep.memory.harvest_energy_source;
     if(source_id === undefined) {
         var sources = creep.room.find(FIND_SOURCES)
-            .key_sort(source_harvest_rate);
+            .key_sort(util.source_harvest_rate);
 
         creep.memory.harvest_energy_source = sources[0].id;
         source_id = creep.memory.harvest_energy_source.id;
