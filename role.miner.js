@@ -42,9 +42,7 @@ function run(creep) {
         .length
     ;
     var energy_per_tick = 2*num_work_parts;
-    var at_full_capacity = (creep.carry[RESOURCE_ENERGY] + energy_per_tick <= creep.carryCapacity);
-
-
+    var at_full_capacity = (creep.carry[RESOURCE_ENERGY] + energy_per_tick >= creep.carryCapacity);
 
 
     // 1. Get to the mining site
@@ -69,7 +67,7 @@ function run(creep) {
     // 4. Build the mining storage (if capacity full)
     if(container_blueprint && at_full_capacity) {
         creep.say('I build!');
-        creep.build(container_blueprint);
+        var err = creep.build(container_blueprint);
     }
     
     // 5. Repair the mining storage

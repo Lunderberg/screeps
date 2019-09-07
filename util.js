@@ -45,6 +45,10 @@ Array.prototype.random_choice = function() {
     return this[Math.floor(this.length*Math.random())];
 };
 
+Array.prototype.extend = function(arr) {
+    this.push(...arr);
+};
+
 function creep_cost(body_parts) {
     return body_parts
         .map( part => BODYPART_COST[part])

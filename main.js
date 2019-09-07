@@ -12,12 +12,28 @@ function clear_dead_memory() {
     }
 }
 
+function self_destruct() {
+    Object.values(Game.creeps)
+        .forEach(creep => creep.suicide());
+
+    Object.values(Game.spawns)
+        .forEach(spawn => spawn.destroy());
+}
+
+function clear_walls() {
+    var walls = Object.values(Game.spawns)
+        .map(s => s.room.find(FIND_STRUCTURES))
+        .flat()
+        .filter(s => s.structureType === STRUCTURE_WALL)
+        .forEach(s => s.destroy())
+    ;
+}
+
 module.exports.loop = function() {
     clear_dead_memory();
 
     var room = Game.spawns['Spawn1'].room;
-    room_planner.plan_room(room);
-    room_planner.apply_plan(room);
+    room_planner.place_sites(room);
     visuals.census(room);
 
     for(var name in Game.creeps) {
